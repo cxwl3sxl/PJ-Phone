@@ -1,33 +1,43 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
+using Avalonia.Media.Immutable;
+using SoftPhone.PjPhone;
 
 namespace SoftPhone
 {
     public class PhoneViewModel : BaseViewModel, IDisposable
     {
+        private readonly IBrush _red = new ImmutableSolidColorBrush(Colors.Red);
+        private readonly IBrush _green = new ImmutableSolidColorBrush(Colors.Green);
+        private readonly IBrush _white = new ImmutableSolidColorBrush(Colors.White);
+
+        private const string PickUp = "接听";
+        private const string HangUp = "挂断";
+        private const string Call = "呼叫";
+
+        private IPhone? _phone;
+
         public PhoneViewModel(PhoneProfile profile)
         {
             Profile = profile;
             NumberCommand = new RelayCommand<string>(NumberClick);
             CloseOrOpenCommand = new RelayCommand(CloseOrOpen);
             ActionCommand = new RelayCommand(Action);
-            IsLogging = true;
-            test();
+            InitPhone();
         }
 
-        async void test()
+        void InitPhone()
         {
-            await Task.Delay(3000);
-            IsLogging = false;
-            IsOnline = true;
+            ActionLabel = Call;
+            IsOnline = false;
+            IsLogging = true;
+            _phone = new PhoneApp();
+            _phone.OnCallConnected += _phone_OnCallConnected;
+            _phone.OnCallHangup += _phone_OnCallHangup;
+            _phone.OnIncomingCall += _phone_OnIncomingCall;
+            _phone.OnRegistrationStateChanged += _phone_OnRegistrationStateChanged;
+            _phone.Login(Profile.Server!, Profile.Port!.Value, Profile.Number!, Profile.Password!);
         }
 
         public PhoneProfile Profile { get; }
@@ -39,6 +49,8 @@ namespace SoftPhone
             Profile.Password = profile.Password;
             Profile.Server = profile.Server;
             Profile.Port = profile.Port;
+            Dispose();
+            InitPhone();
         }
 
         #region props
@@ -96,7 +108,16 @@ namespace SoftPhone
 
         public void Dispose()
         {
-            // TODO 在此释放托管资源
+            if (_phone != null)
+            {
+                _phone.OnCallConnected -= _phone_OnCallConnected;
+                _phone.OnCallHangup -= _phone_OnCallHangup;
+                _phone.OnIncomingCall -= _phone_OnIncomingCall;
+                _phone.OnRegistrationStateChanged -= _phone_OnRegistrationStateChanged;
+
+            }
+
+            _phone?.Dispose();
         }
 
         #endregion
@@ -107,6 +128,7 @@ namespace SoftPhone
 
         void CloseOrOpen()
         {
+            if (ActionLabel == HangUp) return;
             IsOnline = !IsOnline;
         }
 
@@ -118,7 +140,55 @@ namespace SoftPhone
 
         void Action()
         {
-       
+            switch (ActionLabel)
+            {
+                case HangUp:
+                    _phone?.Hangup();
+                    break;
+                case Call:
+                    if (!string.IsNullOrWhiteSpace(PhoneStatus))
+                    {
+                        _phone?.Call(PhoneStatus);
+                        ActionLabel = HangUp;
+                        PhoneStatusColor = _red;
+                    }
+
+                    break;
+                case PickUp:
+                    _phone?.Pickup();
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region phone event
+
+        private void _phone_OnRegistrationStateChanged(bool isOnline, string reason)
+        {
+            IsLogging = false;
+            IsOnline = isOnline;
+            LineStatus = reason;
+        }
+
+        private void _phone_OnIncomingCall(string callerNumber)
+        {
+            ActionLabel = PickUp;
+            PhoneStatus = callerNumber;
+            PhoneStatusColor = _red;
+        }
+
+        private void _phone_OnCallHangup()
+        {
+            ActionLabel = Call;
+            PhoneStatus = "";
+            PhoneStatusColor = _white;
+        }
+
+        private void _phone_OnCallConnected()
+        {
+            ActionLabel = HangUp;
+            PhoneStatusColor = _green;
         }
 
         #endregion

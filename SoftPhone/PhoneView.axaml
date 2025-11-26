@@ -108,26 +108,26 @@
               CornerRadius="5"
               Background="#fff"
               Margin="0 0 0 10">
-        <Grid RowDefinitions="10,Auto,Auto,40" ColumnDefinitions="Auto,*,Auto">
-          <TextBlock Grid.Row="1"
+        <Grid RowDefinitions="Auto,Auto,40" ColumnDefinitions="Auto,*,Auto">
+          <TextBlock Grid.Row="0"
                      Grid.Column="0"
                      Classes="StatusText"
                      Text="{Binding LineStatus}"></TextBlock>
-          <TextBlock Grid.Row="1"
+          <TextBlock Grid.Row="0"
                      Grid.Column="1"
                      Grid.ColumnSpan="2"
                      Classes="StatusText"
                      HorizontalAlignment="Right"
                      Text="{Binding Profile.Number}"></TextBlock>
 
-          <TextBlock Grid.Row="2"
+          <TextBlock Grid.Row="1"
                      Grid.Column="1"
                      Grid.ColumnSpan="2"
                      Classes="StatusText"
                      HorizontalAlignment="Right"
                      Text="{Binding Profile.Server}"></TextBlock>
 
-          <Label Grid.Row="3"
+          <Label Grid.Row="2"
                  Grid.Column="0"
                  Grid.ColumnSpan="2"
                  Background="{Binding PhoneStatusColor}"
