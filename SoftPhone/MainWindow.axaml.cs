@@ -1,12 +1,99 @@
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace SoftPhone
 {
     public partial class MainWindow : Window
     {
+        public const string ProfileDir = "profiles";
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        #region load
+
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            if (!Directory.Exists(ProfileDir)) Directory.CreateDirectory(ProfileDir);
+            var allProfiles = Directory
+                .GetFiles(ProfileDir, "*.json")
+                .OrderBy(Path.GetFileNameWithoutExtension);
+            foreach (var file in allProfiles)
+            {
+                LoadProfile(file);
+            }
+        }
+
+        void LoadProfile(string file)
+        {
+            try
+            {
+                var profile = JsonSerializer.Deserialize<PhoneProfile>(File.ReadAllText(file));
+                if (profile == null) return;
+
+                var phoneView = new PhoneView(profile);
+                PhoneViewContainer.Children.Add(phoneView);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"加载电话配置{file}出错:{ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region 增加
+
+        private void AddNew_OnClick(object? sender, RoutedEventArgs e)
+        {
+            new EditProfile(profile => { PhoneViewContainer.Children.Add(new PhoneView(profile)); }).ShowDialog(this);
+        }
+
+        #endregion
+
+        #region 清空
+
+        private async void CleanAll_OnClick(object? sender, RoutedEventArgs e)
+        {
+            var box = MessageBoxManager
+                .GetMessageBoxStandard("确认",
+                    "确定要清空所有话机配置吗？",
+                    ButtonEnum.YesNo,
+                    MsBox.Avalonia.Enums.Icon.Question);
+            var result = await box.ShowAsync();
+            if (result == ButtonResult.No) return;
+            Directory.Delete(ProfileDir, true);
+            Directory.CreateDirectory(ProfileDir);
+            foreach (var child in PhoneViewContainer.Children)
+            {
+                if (child is PhoneView pv)
+                {
+                    pv.Phone?.Dispose();
+                }
+            }
+
+            PhoneViewContainer.Children.Clear();
+        }
+
+        #endregion
+
+        #region 退出
+
+        private void Exit_OnClick(object? sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
     }
 }

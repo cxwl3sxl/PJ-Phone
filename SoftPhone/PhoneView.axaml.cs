@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 namespace SoftPhone;
 
@@ -10,4 +8,11 @@ public partial class PhoneView : UserControl
     {
         InitializeComponent();
     }
+
+    public PhoneView(PhoneProfile profile) : this()
+    {
+        DataContext = profile;
+    }
+
+    public IPhone? Phone { get; }
 }

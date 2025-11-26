@@ -5,14 +5,17 @@
         xmlns:softPhone="clr-namespace:SoftPhone"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        MinWidth="216"
+        MinHeight="285"
         x:Class="SoftPhone.MainWindow"
         Title="SoftPhone">
   <Grid RowDefinitions="Auto,*">
     <Menu Grid.Row="0">
       <MenuItem Header="电话">
-        <MenuItem Header="增加"></MenuItem>
-        <MenuItem Header="清空"></MenuItem>
-        <MenuItem Header="退出"></MenuItem>
+        <MenuItem Header="增加" Click="AddNew_OnClick"></MenuItem>
+        <MenuItem Header="清空" Click="CleanAll_OnClick"></MenuItem>
+        <MenuItem Header="退出" Click="Exit_OnClick"></MenuItem>
       </MenuItem>
       <MenuItem Header="自动">
         <MenuItem Header="配置"></MenuItem>
@@ -20,11 +23,7 @@
         <MenuItem Header="关闭"></MenuItem>
       </MenuItem>
     </Menu>
-    <WrapPanel Grid.Row="1">
-      <softPhone:PhoneView></softPhone:PhoneView>
-      <softPhone:PhoneView></softPhone:PhoneView>
-      <softPhone:PhoneView></softPhone:PhoneView>
-      <softPhone:PhoneView></softPhone:PhoneView>
+    <WrapPanel Name="PhoneViewContainer" Grid.Row="1">
     </WrapPanel>
   </Grid>
 </Window>
