@@ -75,6 +75,22 @@
     <Style Selector="Image.Offline">
       <Setter Property="Source" Value="images/gnome_shutdown.png"></Setter>
     </Style>
+
+    <Style Selector="Border.Logging">
+      <Style.Animations>
+        <Animation Duration="0:0:2" IterationCount="Infinite" PlaybackDirection="Alternate">
+          <KeyFrame Cue="0%">
+            <Setter Property="Background" Value="Red"/>
+          </KeyFrame>
+          <KeyFrame Cue="50%">
+            <Setter Property="Background" Value="Green"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Background" Value="Blue"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
   </UserControl.Styles>
   <Border Classes="PhoneBg">
     <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,Auto">
@@ -159,6 +175,20 @@
                Classes.Offline="{Binding IsOnline, Converter={StaticResource BoolNegateConvertor}}"
                Classes.Online="{Binding IsOnline}"></Image>
       </Button>
+      <Border Grid.Row="0"
+              Grid.Column="0"
+              HorizontalAlignment="Left"
+              CornerRadius="10"
+              Margin="-9 -9 0 0"
+              VerticalAlignment="Top"
+              Width="18"
+              Height="18"
+              IsVisible="{Binding IsLogging}"
+              Classes="Logging">
+        <Border.Background>
+          <SolidColorBrush Color="Red"/>
+        </Border.Background>
+      </Border>
 
       <Button Grid.Row="0"
               Grid.Column="2"

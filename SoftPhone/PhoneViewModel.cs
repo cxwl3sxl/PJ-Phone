@@ -19,6 +19,15 @@ namespace SoftPhone
             NumberCommand = new RelayCommand<string>(NumberClick);
             CloseOrOpenCommand = new RelayCommand(CloseOrOpen);
             ActionCommand = new RelayCommand(Action);
+            IsLogging = true;
+            test();
+        }
+
+        async void test()
+        {
+            await Task.Delay(3000);
+            IsLogging = false;
+            IsOnline = true;
         }
 
         public PhoneProfile Profile { get; }
@@ -61,6 +70,12 @@ namespace SoftPhone
         public IBrush? PhoneStatusColor
         {
             get => Get<IBrush>();
+            set => Set(value);
+        }
+
+        public bool IsLogging
+        {
+            get => Get<bool>();
             set => Set(value);
         }
 
