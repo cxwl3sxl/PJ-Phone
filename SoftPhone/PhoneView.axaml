@@ -1,0 +1,142 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             CornerRadius="5"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Top"
+             x:Class="SoftPhone.PhoneView">
+  <UserControl.Resources>
+    <LinearGradientBrush x:Key="LinearGradientBrush" StartPoint="50%,0%" EndPoint="50%,100%">
+      <GradientStop Offset="0.0" Color="#C5C5C5"/>
+      <GradientStop Offset="0.35" Color="#666"/>
+      <GradientStop Offset="0.9" Color="#C5C5C5"/>
+      <GradientStop Offset="1.0" Color="#C5C5C5"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="LinearGradientBrush2" StartPoint="50%,0%" EndPoint="50%,100%">
+      <GradientStop Offset="0.0" Color="#aaa"/>
+      <GradientStop Offset="0.1" Color="#aaa"/>
+      <GradientStop Offset="0.4" Color="#e1eaf7"/>
+      <GradientStop Offset="0.7" Color="#aaa"/>
+      <GradientStop Offset="1.0" Color="#aaa"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="LinearGradientBrush3" StartPoint="50%,0%" EndPoint="50%,100%">
+      <GradientStop Offset="0.0" Color="#74a6f1"/>
+      <GradientStop Offset="0.4" Color="#0d6efd"/>
+      <GradientStop Offset="1.0" Color="#74a6f1"/>
+    </LinearGradientBrush>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="TextBlock.StatusText">
+      <Setter Property="FontSize" Value="12"></Setter>
+    </Style>
+    <Style Selector="Button.Number">
+      <Setter Property="Height" Value="30"></Setter>
+      <Setter Property="FontSize" Value="16"></Setter>
+      <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+      <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+      <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+      <Setter Property="Width" Value="60"></Setter>
+      <Setter Property="Margin" Value="2"></Setter>
+      <Setter Property="BorderBrush" Value="#777"></Setter>
+      <Setter Property="BorderThickness" Value="1"></Setter>
+      <Setter Property="Background" Value="{StaticResource LinearGradientBrush2}"></Setter>
+    </Style>
+    <Style Selector="Button.Number:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource LinearGradientBrush3}"></Setter>
+      <Setter Property="BorderBrush" Value="#0d6efd"></Setter>
+    </Style>
+
+    <Style Selector="Button.ImageButton">
+      <Setter Property="Background" Value="Transparent"></Setter>
+      <Setter Property="Padding" Value="0"></Setter>
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Opacity" Value="0.8"></Setter>
+      </Style>
+    </Style>
+    <Style Selector="Button.ImageButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent"></Setter>
+      <Setter Property="Opacity" Value="1"></Setter>
+    </Style>
+    <Style Selector="Border.PhoneBg">
+      <Setter Property="Margin" Value="5"></Setter>
+      <Setter Property="Padding" Value="5"></Setter>
+      <Setter Property="CornerRadius" Value="5"></Setter>
+      <Setter Property="Background" Value="{StaticResource LinearGradientBrush}"></Setter>
+    </Style>
+  </UserControl.Styles>
+  <Border Classes="PhoneBg">
+    <Grid RowDefinitions="*,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,Auto">
+      <Grid Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            RowDefinitions="10,Auto,Auto,*"
+            ColumnDefinitions="Auto,*,Auto"
+            Background="#fff"
+            Margin="0 0 0 10">
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   Classes="StatusText">离线</TextBlock>
+        <TextBlock Grid.Row="1"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2"
+                   Classes="StatusText"
+                   HorizontalAlignment="Right">1004(1004)</TextBlock>
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2"
+                   Classes="StatusText"
+                   HorizontalAlignment="Right">192.168.0.31</TextBlock>
+
+        <Label Grid.Row="3"
+               Grid.Column="0"
+               Grid.ColumnSpan="2"
+               Background="Red"
+               VerticalAlignment="Center"
+               HorizontalContentAlignment="Center"
+               Margin="0 10">就绪</Label>
+      </Grid>
+
+      <Button Grid.Row="1" Grid.Column="0" Classes="Number">1</Button>
+      <Button Grid.Row="1" Grid.Column="1" Classes="Number">2</Button>
+      <Button Grid.Row="1" Grid.Column="2" Classes="Number">3</Button>
+
+      <Button Grid.Row="2" Grid.Column="0" Classes="Number">4</Button>
+      <Button Grid.Row="2" Grid.Column="1" Classes="Number">5</Button>
+      <Button Grid.Row="2" Grid.Column="2" Classes="Number">6</Button>
+
+      <Button Grid.Row="3" Grid.Column="0" Classes="Number">7</Button>
+      <Button Grid.Row="3" Grid.Column="1" Classes="Number">8</Button>
+      <Button Grid.Row="3" Grid.Column="2" Classes="Number">9</Button>
+
+      <Button Grid.Row="4" Grid.Column="0" Classes="Number">*</Button>
+      <Button Grid.Row="4" Grid.Column="1" Classes="Number">0</Button>
+      <Button Grid.Row="4" Grid.Column="2" Classes="Number">#</Button>
+
+      <Button Grid.Row="5" Grid.Column="0" Classes="Number">设置</Button>
+      <Button Grid.Row="5" Grid.Column="1" Width="124" Grid.ColumnSpan="2" Classes="Number">拨号</Button>
+
+      <Button Grid.Row="0"
+              Grid.Column="0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Classes="ImageButton"
+              CornerRadius="10"
+              Margin="-10 -10 0 0">
+        <Image Width="16" Height="16" Source="../images/gnome_on.png"></Image>
+      </Button>
+
+      <Button Grid.Row="0"
+              Grid.Column="2"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              CornerRadius="10"
+              Classes="ImageButton"
+              Margin="0 -10 -10 0">
+        <Image Width="16" Height="16" Source="../images/cross_script.png"></Image>
+      </Button>
+    </Grid>
+  </Border>
+</UserControl>
