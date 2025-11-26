@@ -42,6 +42,7 @@ namespace SoftPhone
                 if (profile == null) return;
 
                 var phoneView = new PhoneView(profile);
+                phoneView.OnRemoveRequest += Pv_OnRemoveRequest;
                 PhoneViewContainer.Children.Add(phoneView);
             }
             catch (Exception ex)
@@ -56,7 +57,20 @@ namespace SoftPhone
 
         private void AddNew_OnClick(object? sender, RoutedEventArgs e)
         {
-            new EditProfile(profile => { PhoneViewContainer.Children.Add(new PhoneView(profile)); }).ShowDialog(this);
+            new EditProfile(profile =>
+            {
+                var pv = new PhoneView(profile);
+                pv.OnRemoveRequest += Pv_OnRemoveRequest;
+                PhoneViewContainer.Children.Add(pv);
+            }).ShowDialog(this);
+        }
+
+        private void Pv_OnRemoveRequest(object? sender, EventArgs e)
+        {
+            if (sender is not PhoneView pv) return;
+            var profileFile = Path.Combine(ProfileDir, $"{pv.Profile!.Server}@{pv.Profile.Number}.json");
+            File.Delete(profileFile);
+            PhoneViewContainer.Children.Remove(pv);
         }
 
         #endregion
