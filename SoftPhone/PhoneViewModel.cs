@@ -15,7 +15,6 @@ namespace SoftPhone
     {
         public PhoneViewModel(PhoneProfile profile)
         {
-            DisplayName = $"{profile.Name}({profile.Number})";
             Profile = profile;
             NumberCommand = new RelayCommand<string>(NumberClick);
             CloseOrOpenCommand = new RelayCommand(CloseOrOpen);
@@ -31,7 +30,6 @@ namespace SoftPhone
             Profile.Password = profile.Password;
             Profile.Server = profile.Server;
             Profile.Port = profile.Port;
-            DisplayName = $"{profile.Name}({profile.Number})";
         }
 
         #region props
@@ -43,12 +41,6 @@ namespace SoftPhone
         }
 
         public string? LineStatus
-        {
-            get => Get<string>();
-            set => Set(value);
-        }
-
-        public string? DisplayName
         {
             get => Get<string>();
             set => Set(value);
