@@ -1,20 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 
 namespace SoftPhone
 {
-    public class PhoneViewModel : BaseViewModel
+    public class PhoneViewModel : BaseViewModel, IDisposable
     {
-        public PhoneViewModel(PhoneProfile profile, IPhone phone)
+        public PhoneViewModel(PhoneProfile profile)
         {
             DisplayName = $"{profile.Name}({profile.Number})";
             Profile = profile;
             NumberCommand = new RelayCommand<string>(NumberClick);
+            CloseOrOpenCommand = new RelayCommand(CloseOrOpen);
+            ActionCommand = new RelayCommand(Action);
         }
 
         public PhoneProfile Profile { get; }
@@ -28,6 +33,8 @@ namespace SoftPhone
             Profile.Port = profile.Port;
             DisplayName = $"{profile.Name}({profile.Number})";
         }
+
+        #region props
 
         public bool IsOnline
         {
@@ -53,11 +60,21 @@ namespace SoftPhone
             set => Set(value);
         }
 
+        public string? ActionLabel
+        {
+            get => Get<string>();
+            set => Set(value);
+        }
+
         public IBrush? PhoneStatusColor
         {
             get => Get<IBrush>();
             set => Set(value);
         }
+
+        #endregion
+
+        #region NumberClick
 
         public ICommand NumberCommand { get; }
 
@@ -65,5 +82,38 @@ namespace SoftPhone
         {
             PhoneStatus += number;
         }
+
+        #endregion
+
+        #region Dispose
+
+        public void Dispose()
+        {
+            // TODO 在此释放托管资源
+        }
+
+        #endregion
+
+        #region CloseOrOpenCommand
+
+        public ICommand CloseOrOpenCommand { get; }
+
+        void CloseOrOpen()
+        {
+            IsOnline = !IsOnline;
+        }
+
+        #endregion
+
+        #region ActionCommand
+
+        public ICommand ActionCommand { get; }
+
+        void Action()
+        {
+       
+        }
+
+        #endregion
     }
 }

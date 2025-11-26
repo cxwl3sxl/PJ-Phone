@@ -8,5 +8,6 @@ namespace SoftPhone
 {
     public interface IPhone : IDisposable
     {
+        void Login();
     }
 }

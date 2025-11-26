@@ -1,5 +1,4 @@
 using System;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MsBox.Avalonia;
@@ -7,7 +6,7 @@ using MsBox.Avalonia.Enums;
 
 namespace SoftPhone;
 
-public partial class PhoneView : UserControl
+public partial class PhoneView : UserControl, IDisposable
 {
     private readonly PhoneViewModel? _viewModel;
 
@@ -19,10 +18,8 @@ public partial class PhoneView : UserControl
     public PhoneView(PhoneProfile profile) : this()
     {
         Profile = profile;
-        DataContext = _viewModel = new PhoneViewModel(profile, Phone);
+        DataContext = _viewModel = new PhoneViewModel(profile);
     }
-
-    public IPhone? Phone { get; }
 
     public PhoneProfile? Profile { get; private set; }
 
@@ -34,7 +31,7 @@ public partial class PhoneView : UserControl
             .GetMessageBoxStandard("温馨提示", "确定要移除该分机吗？", ButtonEnum.YesNo, Icon.Question)
             .ShowAsync();
         if (result == ButtonResult.No) return;
-        Phone?.Dispose();
+        _viewModel?.Dispose();
         OnRemoveRequest?.Invoke(this, EventArgs.Empty);
     }
 
@@ -45,5 +42,10 @@ public partial class PhoneView : UserControl
             Profile = profile;
             _viewModel?.UpdateProfile(profile);
         }).ShowDialog((VisualRoot as Window)!);
+    }
+
+    public void Dispose()
+    {
+        _viewModel?.Dispose();
     }
 }

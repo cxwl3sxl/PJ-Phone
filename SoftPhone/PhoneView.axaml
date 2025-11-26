@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:softPhone="clr-namespace:SoftPhone"
+             xmlns:vc="clr-namespace:SoftPhone.ValueConvertor"
              mc:Ignorable="d"
              CornerRadius="5"
              HorizontalAlignment="Left"
@@ -28,6 +29,7 @@
       <GradientStop Offset="0.4" Color="#0d6efd"/>
       <GradientStop Offset="1.0" Color="#74a6f1"/>
     </LinearGradientBrush>
+    <vc:BoolNegateConvertor x:Key="BoolNegateConvertor"></vc:BoolNegateConvertor>
   </UserControl.Resources>
   <UserControl.Styles>
     <Style Selector="TextBlock.StatusText">
@@ -58,7 +60,6 @@
       </Style>
     </Style>
     <Style Selector="Button.ImageButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-      <Setter Property="Background" Value="Transparent"></Setter>
       <Setter Property="Opacity" Value="1"></Setter>
     </Style>
     <Style Selector="Border.PhoneBg">
@@ -66,6 +67,13 @@
       <Setter Property="Padding" Value="5"></Setter>
       <Setter Property="CornerRadius" Value="5"></Setter>
       <Setter Property="Background" Value="{StaticResource LinearGradientBrush}"></Setter>
+    </Style>
+
+    <Style Selector="Image.Online">
+      <Setter Property="Source" Value="images/gnome_on.png"></Setter>
+    </Style>
+    <Style Selector="Image.Offline">
+      <Setter Property="Source" Value="images/gnome_shutdown.png"></Setter>
     </Style>
   </UserControl.Styles>
   <Border Classes="PhoneBg">
@@ -108,21 +116,27 @@
       <Button Grid.Row="1" IsEnabled="{Binding IsOnline}" Grid.Column="0" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="1">1</Button>
       <Button Grid.Row="1" IsEnabled="{Binding IsOnline}" Grid.Column="1" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="2">2</Button>
       <Button Grid.Row="1" IsEnabled="{Binding IsOnline}" Grid.Column="2" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="3">3</Button>
-  
+
       <Button Grid.Row="2" IsEnabled="{Binding IsOnline}" Grid.Column="0" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="4">4</Button>
       <Button Grid.Row="2" IsEnabled="{Binding IsOnline}" Grid.Column="1" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="5">5</Button>
       <Button Grid.Row="2" IsEnabled="{Binding IsOnline}" Grid.Column="2" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="6">6</Button>
-    
+
       <Button Grid.Row="3" IsEnabled="{Binding IsOnline}" Grid.Column="0" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="7">7</Button>
       <Button Grid.Row="3" IsEnabled="{Binding IsOnline}" Grid.Column="1" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="8">8</Button>
       <Button Grid.Row="3" IsEnabled="{Binding IsOnline}" Grid.Column="2" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="9">9</Button>
-    
+
       <Button Grid.Row="4" IsEnabled="{Binding IsOnline}" Grid.Column="0" Classes="Number">*</Button>
       <Button Grid.Row="4" IsEnabled="{Binding IsOnline}" Grid.Column="1" Classes="Number" Command="{Binding NumberCommand}" CommandParameter="0">0</Button>
       <Button Grid.Row="4" IsEnabled="{Binding IsOnline}" Grid.Column="2" Classes="Number">#</Button>
 
       <Button Grid.Row="5" Grid.Column="0" Classes="Number" Click="Setting_OnClick">设置</Button>
-      <Button Grid.Row="5" IsEnabled="{Binding IsOnline}" Grid.Column="1" Width="124" Grid.ColumnSpan="2" Classes="Number">拨号</Button>
+      <Button Grid.Row="5" IsEnabled="{Binding IsOnline}"
+              Grid.Column="1"
+              Width="124"
+              Grid.ColumnSpan="2"
+              Classes="Number"
+              Content="{Binding ActionLabel}"
+              Command="{Binding ActionCommand}"></Button>
 
       <Button Grid.Row="0"
               Grid.Column="0"
@@ -130,8 +144,12 @@
               VerticalAlignment="Top"
               Classes="ImageButton"
               CornerRadius="10"
-              Margin="-10 -10 0 0">
-        <Image Width="16" Height="16" Source="../images/gnome_on.png"></Image>
+              Margin="-10 -10 0 0"
+              Command="{Binding CloseOrOpenCommand}">
+        <Image Width="16"
+               Height="16"
+               Classes.Offline="{Binding IsOnline, Converter={StaticResource BoolNegateConvertor}}"
+               Classes.Online="{Binding IsOnline}"></Image>
       </Button>
 
       <Button Grid.Row="0"

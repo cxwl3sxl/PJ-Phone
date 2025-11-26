@@ -92,7 +92,7 @@ namespace SoftPhone
             {
                 if (child is PhoneView pv)
                 {
-                    pv.Phone?.Dispose();
+                    pv.Dispose();
                 }
             }
 
