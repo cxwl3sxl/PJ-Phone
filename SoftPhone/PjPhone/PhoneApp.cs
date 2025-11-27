@@ -1,40 +1,45 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SoftPhone.Sip;
 
 namespace SoftPhone.PjPhone
 {
-    internal class PhoneApp : IPhone
+    internal partial class PhoneApp : IPhone
     {
+        private SipAccount? _account;
+
+        public PhoneApp()
+        {
+            Instances.Add(this);
+        }
+
+
         public void Dispose()
         {
-            // TODO 在此释放托管资源
+            Instances.Remove(this);
+            if (_account == null) return;
+            SipPhone.RemoveAccount(_account);
         }
 
-        public async void Login(string server, int port, string number, string password)
+        public void Login(string server, int port, string number, string password)
         {
-            await Task.Delay(3000);
-            OnRegistrationStateChanged?.Invoke(true, "在线");
+            _account = SipPhone
+                .AddSipAccount(number, password, server, port)
+                .SetDisplayName(Guid.NewGuid().ToString());
         }
 
-        public async void Call(string number)
+        public void Call(string number)
         {
-            await Task.Delay(3000);
-            OnCallConnected?.Invoke();
+            _account?.Call(number);
         }
 
-        public async void Hangup()
+        public void Hangup()
         {
-            OnCallHangup?.Invoke();
-            await Task.Delay(5000);
-            OnIncomingCall?.Invoke("13800138001");
+            _account?.Hangup();
         }
 
         public void Pickup()
         {
-            OnCallConnected?.Invoke();
+          
         }
 
         public event RegistrationStateChanged? OnRegistrationStateChanged;
