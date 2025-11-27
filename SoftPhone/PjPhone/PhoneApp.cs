@@ -1,22 +1,33 @@
 using System;
+using System.Diagnostics;
+using System.Threading;
 using SoftPhone.Sip;
 
 namespace SoftPhone.PjPhone
 {
-    internal partial class PhoneApp : IPhone
+    internal class PhoneApp : IPhone
     {
-        private SipAccount? _account;
+        #region static
 
-        public PhoneApp()
+        static PhoneApp()
         {
-            Instances.Add(this);
+            SipPhone.Init(Thread.CurrentThread, false);
         }
 
+        #endregion
+
+
+        private SipAccount? _account;
+
+        #region IPhone
 
         public void Dispose()
         {
-            Instances.Remove(this);
             if (_account == null) return;
+            _account.OnRegistrationStateChanged -= _account_OnRegistrationStateChanged;
+            _account.OnCallMissed -= _account_OnCallMissed;
+            _account.OnCalling -= _account_OnCalling;
+            _account.OnCallStateChanged -= _account_OnCallStateChanged;
             SipPhone.RemoveAccount(_account);
         }
 
@@ -25,6 +36,10 @@ namespace SoftPhone.PjPhone
             _account = SipPhone
                 .AddSipAccount(number, password, server, port)
                 .SetDisplayName(Guid.NewGuid().ToString());
+            _account.OnRegistrationStateChanged += _account_OnRegistrationStateChanged;
+            _account.OnCallMissed += _account_OnCallMissed;
+            _account.OnCalling += _account_OnCalling;
+            _account.OnCallStateChanged += _account_OnCallStateChanged;
         }
 
         public void Call(string number)
@@ -39,12 +54,40 @@ namespace SoftPhone.PjPhone
 
         public void Pickup()
         {
-          
+            _account?.Pickup();
         }
 
         public event RegistrationStateChanged? OnRegistrationStateChanged;
         public event IncomingCall? OnIncomingCall;
         public event CallConnected? OnCallConnected;
         public event CallHangup? OnCallHangup;
+
+        #endregion
+
+        #region event handler
+
+        private void _account_OnCallStateChanged(object? sender, SipCall e)
+        {
+            Trace.WriteLine($"呼叫状态变化 {e.CallId} {e.State}");
+        }
+
+        private void _account_OnCalling(object? sender, SipCall e)
+        {
+            if (e.Direction != CallDirection.InComing) return;
+            OnIncomingCall?.Invoke(e.getInfo().remoteContact);
+        }
+
+        private void _account_OnCallMissed(object? sender, SipCall e)
+        {
+
+        }
+
+        private void _account_OnRegistrationStateChanged(object? sender, string e)
+        {
+            OnRegistrationStateChanged?
+                .Invoke(_account!.IsRegistrationOk, _account.IsRegistrationOk ? "在线" : e);
+        }
+
+        #endregion
     }
 }

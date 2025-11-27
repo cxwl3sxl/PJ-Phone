@@ -161,6 +161,14 @@ public class SipAccount : Account
         }
     }
 
+    /// <summary>
+    /// 接起来电
+    /// </summary>
+    public void Pickup()
+    {
+        _lastCall?.Answer();
+    }
+
     #endregion
 
     #region override
