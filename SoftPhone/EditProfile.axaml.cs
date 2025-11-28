@@ -22,7 +22,11 @@ public partial class EditProfile : Window
     {
         Title = "新增配置";
         _afterSave = afterSave;
-        DataContext = _profile = new PhoneProfile();
+        DataContext = _profile = new PhoneProfile()
+        {
+            Port = 5060,
+            Password = "12345"
+        };
         _beforeSave = () =>
             !File.Exists(Path.Combine(MainWindow.ProfileDir, $"{_profile.Server}@{_profile.Number}.json"));
     }
