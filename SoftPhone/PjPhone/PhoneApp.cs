@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
 using SoftPhone.Sip;
 
@@ -14,8 +15,9 @@ namespace SoftPhone.PjPhone
             SipPhone.Init(Thread.CurrentThread, false);
         }
 
-        #endregion
+        private static readonly Regex NumberRegex = new Regex("\"\\d+\"");
 
+        #endregion
 
         private SipAccount? _account;
 
@@ -68,13 +70,23 @@ namespace SoftPhone.PjPhone
 
         private void _account_OnCallStateChanged(object? sender, SipCall e)
         {
-            Trace.WriteLine($"呼叫状态变化 {e.CallId} {e.State}");
+            Trace.WriteLine($"call {e.CallId} status -> {e.State}");
+            switch (e.State)
+            {
+                case CallState.Connected:
+                    OnCallConnected?.Invoke();
+                    break;
+                case CallState.DisConnected:
+                    OnCallHangup?.Invoke();
+                    break;
+            }
         }
 
         private void _account_OnCalling(object? sender, SipCall e)
         {
             if (e.Direction != CallDirection.InComing) return;
-            OnIncomingCall?.Invoke(e.getInfo().remoteContact);
+            var number = NumberRegex.Match(e.getInfo().remoteUri).Value;
+            OnIncomingCall?.Invoke(number.Replace("\"", ""));
         }
 
         private void _account_OnCallMissed(object? sender, SipCall e)

@@ -144,6 +144,9 @@ namespace SoftPhone
             {
                 case HangUp:
                     _phone?.Hangup();
+                    PhoneStatus = "";
+                    ActionLabel = Call;
+                    PhoneStatusColor = _white;
                     break;
                 case Call:
                     if (!string.IsNullOrWhiteSpace(PhoneStatus))

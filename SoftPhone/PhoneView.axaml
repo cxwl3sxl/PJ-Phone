@@ -91,6 +91,24 @@
         </Animation>
       </Style.Animations>
     </Style>
+
+    <Style Selector="TextBox.PhoneNumber">
+      <Setter Property="BorderThickness" Value="0"></Setter>
+      <Setter Property="VerticalAlignment" Value="Center"></Setter>
+      <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+      <Setter Property="Padding" Value="0"></Setter>
+      <Setter Property="MinHeight" Value="25"></Setter>
+      <Setter Property="Height" Value="25"></Setter>
+      <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+      <Setter Property="Margin" Value="5 0 5 10"></Setter>
+    </Style>
+    <Style Selector="TextBox.PhoneNumber:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="{TemplateBinding Background}"></Setter>
+    </Style>
+    <Style Selector="TextBox.PhoneNumber:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="{TemplateBinding Background}"></Setter>
+      <Setter Property="BorderBrush" Value="{TemplateBinding Background}"></Setter>
+    </Style>
   </UserControl.Styles>
   <Border Classes="PhoneBg">
     <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,Auto">
@@ -127,13 +145,12 @@
                      HorizontalAlignment="Right"
                      Text="{Binding Profile.Server}"></TextBlock>
 
-          <Label Grid.Row="2"
+          <TextBox Grid.Row="2"
                  Grid.Column="0"
                  Grid.ColumnSpan="2"
                  Background="{Binding PhoneStatusColor}"
-                 VerticalAlignment="Center"
-                 HorizontalContentAlignment="Center"
-                 Content="{Binding PhoneStatus}"></Label>
+                 Classes="PhoneNumber"
+                 Text="{Binding PhoneStatus}"></TextBox>
         </Grid>
       </Border>
 
