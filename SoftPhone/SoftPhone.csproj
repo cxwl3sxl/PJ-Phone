@@ -6,6 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>landline.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,5 +25,9 @@
 
   <ItemGroup>
     <AvaloniaResource Include="images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="landline.ico" />
   </ItemGroup>
 </Project>

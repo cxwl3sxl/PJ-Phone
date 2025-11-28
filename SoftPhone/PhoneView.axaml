@@ -8,6 +8,7 @@
              CornerRadius="5"
              HorizontalAlignment="Left"
              VerticalAlignment="Top"
+             MinHeight="300"
              x:DataType="softPhone:PhoneViewModel"
              x:Class="SoftPhone.PhoneView">
   <UserControl.Resources>
