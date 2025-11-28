@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:softPhone="clr-namespace:SoftPhone"
+        mc:Ignorable="d"
+        x:Class="SoftPhone.Setting"
+        x:DataType="softPhone:SettingViewModel"
+        Width="400"
+        Height="300"
+        WindowStartupLocation="CenterOwner"
+        Title="设置">
+  <Window.DataContext>
+    <softPhone:SettingViewModel></softPhone:SettingViewModel>
+  </Window.DataContext>
+  <Grid Margin="5" RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+    <Label VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">无声卡模式</Label>
+    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding NoSoundDevice}"></CheckBox>
+
+    <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.ColumnSpan="2" Command="{Binding SaveCommand}">保存</Button>
+  </Grid>
+</Window>

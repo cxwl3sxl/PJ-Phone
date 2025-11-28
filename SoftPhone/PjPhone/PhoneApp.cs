@@ -12,7 +12,7 @@ namespace SoftPhone.PjPhone
 
         static PhoneApp()
         {
-            SipPhone.Init(Thread.CurrentThread, false);
+            SipPhone.Init(Thread.CurrentThread, AppConfig.Instance.NoSoundDevice);
         }
 
         private static readonly Regex NumberRegex = new Regex("\"\\d+\"");

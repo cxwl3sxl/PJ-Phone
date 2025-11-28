@@ -109,5 +109,14 @@ namespace SoftPhone
         }
 
         #endregion
+
+        #region 设置
+
+        private void Setting_OnClick(object? sender, RoutedEventArgs e)
+        {
+            new Setting().ShowDialog(this);
+        }
+
+        #endregion
     }
 }
