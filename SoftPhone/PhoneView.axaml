@@ -67,6 +67,8 @@
       <Setter Property="Padding" Value="5"></Setter>
       <Setter Property="CornerRadius" Value="5"></Setter>
       <Setter Property="Background" Value="{StaticResource LinearGradientBrush}"></Setter>
+      <Setter Property="BorderBrush" Value="#aaa"></Setter>
+      <Setter Property="BorderThickness" Value="1"></Setter>
     </Style>
 
     <Style Selector="Image.Online">
@@ -109,6 +111,13 @@
       <Setter Property="Background" Value="{TemplateBinding Background}"></Setter>
       <Setter Property="BorderBrush" Value="{TemplateBinding Background}"></Setter>
     </Style>
+
+    <Style Selector="Border.IsOnline">
+      <Setter Property="Background" Value="Green"></Setter>
+    </Style>
+    <Style Selector="Border.Offline">
+      <Setter Property="Background" Value="#666"></Setter>
+    </Style>
   </UserControl.Styles>
   <Border Classes="PhoneBg">
     <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,Auto">
@@ -130,7 +139,18 @@
           <TextBlock Grid.Row="0"
                      Grid.Column="0"
                      Classes="StatusText"
-                     Text="{Binding LineStatus}"></TextBlock>
+                     Margin="18 0 0 0"
+                     Text="{Binding LineStatus}"
+                       ></TextBlock>
+          <Border Grid.Row="0"
+                  Grid.Column="0"
+                  Width="10"
+                  Height="6"
+                  CornerRadius="1.5"
+                  Margin="5 0 0 0"
+                  HorizontalAlignment="Left"
+                  Classes.Offline="{Binding IsOnline,Converter={StaticResource BoolNegateConvertor}}"
+                  Classes.IsOnline="{Binding IsOnline}"></Border>
           <TextBlock Grid.Row="0"
                      Grid.Column="1"
                      Grid.ColumnSpan="2"

@@ -118,6 +118,7 @@ namespace SoftPhone
             }
 
             _phone?.Dispose();
+            _phone = null;
         }
 
         #endregion
@@ -130,6 +131,14 @@ namespace SoftPhone
         {
             if (ActionLabel == HangUp) return;
             IsOnline = !IsOnline;
+            if (IsOnline)
+            {
+                InitPhone();
+            }
+            else
+            {
+                Dispose();
+            }
         }
 
         #endregion
