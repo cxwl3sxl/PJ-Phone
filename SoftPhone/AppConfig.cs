@@ -22,12 +22,17 @@ namespace SoftPhone
 
         private AppConfig()
         {
+            var isNew = false;
             if (!File.Exists("config.ini"))
             {
                 File.Create("config.ini").Close();
+                isNew = true;
             }
 
             _data = _parser.ReadFile("config.ini");
+            if (!isNew) return;
+            _data["UI"]["Audio"] = "false";
+            Save();
         }
 
         public bool NoSoundDevice
