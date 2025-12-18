@@ -93,6 +93,12 @@ namespace SoftPhone
             set => Set(value);
         }
 
+        public bool IsRobot
+        {
+            get => Get<bool>();
+            set => Set(value);
+        }
+
         #endregion
 
         #region NumberClick

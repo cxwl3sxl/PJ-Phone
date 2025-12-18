@@ -35,13 +35,13 @@ namespace SoftPhone
             }
         }
 
-        public IPhone? GetPhone(string number)
+        public PhoneViewModel? GetPhone(string number)
         {
             foreach (var child in PhoneViewContainer.Children)
             {
                 if (child is PhoneView { DataContext: PhoneViewModel pvm } && pvm.Profile.Number == number)
                 {
-                    return pvm.SourcePhone;
+                    return pvm;
                 }
             }
 

@@ -238,6 +238,30 @@
               Click="RemoveMe_OnClick">
         <Image Width="16" Height="16" Source="../images/cross_script.png"></Image>
       </Button>
+
+      <Border Grid.Row="0"
+              IsVisible="{Binding IsRobot}"
+              Background="#55000000"
+              CornerRadius="5"
+              Grid.Column="0"
+              Grid.RowSpan="7"
+              Grid.ColumnSpan="3">
+        <Grid Grid.RowDefinitions="*,*">
+          <Image Grid.Row="0" 
+                 VerticalAlignment="Bottom" 
+                 Width="64" 
+                 Height="64" 
+                 Source="images/robot.png"></Image>
+          <Label Grid.Row="1"
+                 VerticalAlignment="Top"
+                 Background="#fff"
+                 CornerRadius="5"
+                 BorderThickness="1"
+                 BorderBrush="Blue"
+                 Foreground="Blue"
+                 HorizontalAlignment="Center">机器人已接管</Label>
+        </Grid>
+      </Border>
     </Grid>
   </Border>
 </UserControl>
