@@ -18,8 +18,8 @@
       </MenuItem>
       <MenuItem Header="自动">
         <MenuItem Header="配置" Click="AutoCall_OnClick"></MenuItem>
-        <MenuItem Header="开启"></MenuItem>
-        <MenuItem Header="关闭"></MenuItem>
+        <MenuItem Header="开启" Name="StartAutomationMenuItem" Click="StartAutomation_OnClick"></MenuItem>
+        <MenuItem Header="关闭" IsVisible="False" Name="StopAutomationMenuItem" Click="StopAutomation_OnClick"></MenuItem>
       </MenuItem>
       <MenuItem Header="关于">
         <MenuItem Header="设置" Click="Setting_OnClick"></MenuItem>

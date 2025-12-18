@@ -52,6 +52,7 @@ namespace SoftPhone.PjPhone
         public void Hangup()
         {
             _account?.Hangup();
+            OnCallHangup?.Invoke();
         }
 
         public void Pickup()

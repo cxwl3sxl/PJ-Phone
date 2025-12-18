@@ -53,6 +53,8 @@ namespace SoftPhone
             InitPhone();
         }
 
+        public IPhone SourcePhone => _phone!;
+
         #region props
 
         public bool IsOnline

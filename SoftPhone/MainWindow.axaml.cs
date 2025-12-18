@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using SoftPhone.Automation;
 
 namespace SoftPhone
 {
@@ -32,6 +33,19 @@ namespace SoftPhone
                     }
                 }
             }
+        }
+
+        public IPhone? GetPhone(string number)
+        {
+            foreach (var child in PhoneViewContainer.Children)
+            {
+                if (child is PhoneView { DataContext: PhoneViewModel pvm } && pvm.Profile.Number == number)
+                {
+                    return pvm.SourcePhone;
+                }
+            }
+
+            return null;
         }
 
         #region load
@@ -141,8 +155,29 @@ namespace SoftPhone
             new AutoCallWindow().ShowDialog(this);
         }
 
+        private AutomationManager? _callManager;
+        private AutomationManager? _pickManager;
+
+        private void StartAutomation_OnClick(object? sender, RoutedEventArgs e)
+        {
+            StartAutomationMenuItem.IsVisible = false;
+            _callManager = new AutomationManager("Call", true, this);
+            _pickManager = new AutomationManager("Pickup", false, this);
+            _pickManager.Start();
+            _callManager.Start();
+            StopAutomationMenuItem.IsVisible = true;
+        }
+
+        private void StopAutomation_OnClick(object? sender, RoutedEventArgs e)
+        {
+            StopAutomationMenuItem.IsVisible = false;
+            _callManager?.Stop();
+            _pickManager?.Stop();
+            _callManager = null;
+            _pickManager = null;
+            StartAutomationMenuItem.IsVisible = true;
+        }
+
         #endregion
-
-
     }
 }
