@@ -28,7 +28,20 @@ public partial class AutoCallWindow : Window
             _vm.Profiles.Add(profile);
         }
 
+        TryAddGroupItem(AppConfig.Instance.GetAutomation("Call"), _vm.CallGroup);
+        TryAddGroupItem(AppConfig.Instance.GetAutomation("Pickup"), _vm.PickupGroup);
         base.OnOpened(e);
+    }
+
+    void TryAddGroupItem(IEnumerable<AutoGroupItem> configs, ObservableCollection<AutoGroupItem> workGroup)
+    {
+        foreach (var item in configs)
+        {
+            var target = _vm.Profiles.FirstOrDefault(a => a.Number == item.Number);
+            if (target == null) continue;
+            workGroup.Add(item);
+            _vm.Profiles.Remove(target);
+        }
     }
 
     private void AddToPool_OnClick(object? sender, RoutedEventArgs e)
@@ -62,7 +75,7 @@ public partial class AutoCallWindow : Window
 
     private void RemoveCaller_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is not Button { Tag : AutoGroupItem autoGroup }) return;
+        if (sender is not Button { Tag: AutoGroupItem autoGroup }) return;
         _vm.CallGroup.Remove(autoGroup);
         var sourceProfile = _allProfiles.FirstOrDefault(a => a.Number == autoGroup.Number);
         if (sourceProfile != null)
