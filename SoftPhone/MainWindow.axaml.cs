@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,20 @@ namespace SoftPhone
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public IEnumerable<PhoneProfile> Profiles
+        {
+            get
+            {
+                foreach (var child in PhoneViewContainer.Children)
+                {
+                    if (child is PhoneView { Profile: not null } pv)
+                    {
+                        yield return pv.Profile;
+                    }
+                }
+            }
         }
 
         #region load
@@ -118,5 +133,16 @@ namespace SoftPhone
         }
 
         #endregion
+
+        #region 自动化
+
+        private void AutoCall_OnClick(object? sender, RoutedEventArgs e)
+        {
+            new AutoCallWindow().ShowDialog(this);
+        }
+
+        #endregion
+
+
     }
 }

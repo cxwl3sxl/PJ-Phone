@@ -31,5 +31,10 @@ namespace SoftPhone
             get => Get<int>();
             set => Set(value);
         }
+
+        public override string ToString()
+        {
+            return $"{Name}-{Number}";
+        }
     }
 }

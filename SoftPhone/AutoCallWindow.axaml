@@ -1,0 +1,92 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:softPhone="clr-namespace:SoftPhone"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SoftPhone.AutoCallWindow"
+        x:DataType="softPhone:AutoCallWindowViewModel"
+        Title="AutoCallWindow">
+  <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,*,Auto">
+    <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">号码清单：</Label>
+    <ComboBox ItemsSource="{Binding Profiles}"
+              Grid.Row="0"
+              Grid.Column="1"
+              Margin="2"
+              HorizontalAlignment="Stretch"
+              SelectedValueBinding="{Binding Number}"
+              SelectedValue="{Binding SelectedNumber}"></ComboBox>
+    <Button Grid.Row="0"
+            Grid.Column="2"
+            Margin="2"
+            Click="AddToPool_OnClick">添加</Button>
+
+    <TabControl Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                SelectedIndex="{Binding ActiveTabIndex}">
+      <TabItem Header="呼叫组">
+        <DataGrid ItemsSource="{Binding CallGroup}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="号码"
+                                    IsReadOnly="True"
+                                    Width="*"
+                                    Binding="{Binding Number}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="被叫"
+                                    Width="*"
+                                    Binding="{Binding TargetNumber}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="继呼等待(s)"
+                                    Width="120"
+                                    Binding="{Binding Delay}">
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="操作">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"
+                                    Tag="{Binding}" 
+                                    Click="RemoveCaller_OnClick">删除</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+      </TabItem>
+      <TabItem Header="接听组">
+        <DataGrid ItemsSource="{Binding PickupGroup}">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="号码"
+                                IsReadOnly="True"
+                                Width="*"
+                                Binding="{Binding Number}">
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="接听时长(s)"
+                                Width="120"
+                                Binding="{Binding Delay}">
+            </DataGridTextColumn>
+            <DataGridTemplateColumn Header="操作">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <Button HorizontalAlignment="Center" 
+                          VerticalAlignment="Center"
+                          Tag="{Binding}" 
+                          Click="RemovePickup_OnClick">删除</Button>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+          </DataGrid.Columns>
+        </DataGrid>
+      </TabItem>
+    </TabControl>
+
+    <Button Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Margin="5"
+            Click="SaveSetting_OnClick">保存设置</Button>
+  </Grid>
+</Window>
