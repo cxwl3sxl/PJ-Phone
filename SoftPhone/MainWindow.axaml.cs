@@ -179,5 +179,10 @@ namespace SoftPhone
         }
 
         #endregion
+
+        private void About_OnClick(object? sender, RoutedEventArgs e)
+        {
+            new AboutWindow().ShowDialog(this);
+        }
     }
 }

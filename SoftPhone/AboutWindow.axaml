@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Width="600"
+        x:Class="SoftPhone.AboutWindow"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="Height"
+        Title="关于">
+  <StackPanel>
+    <Label Name="Title" FontSize="16" FontWeight="Bold">品杰软电话(版本：v1.0)</Label>
+    <Border BorderThickness="0 1 0 0" BorderBrush="#ccc" Margin="0 10 0 5"></Border>
+    <Label>Avalonia：https://docs.avaloniaui.net/zh-Hans/</Label>
+    <Label>pjsip：https://www.pjsip.org/</Label>
+    <Label>MessageBox.Avalonia：https://github.com/AvaloniaCommunity/MessageBox.Avalonia</Label>
+    <Label>ini-parser：https://github.com/rickyah/ini-parser</Label>
+    <Button HorizontalAlignment="Center"
+            Margin="10"
+            Click="Close_OnClick">确定</Button>
+  </StackPanel>
+</Window>

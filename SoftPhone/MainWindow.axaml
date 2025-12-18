@@ -23,7 +23,7 @@
       </MenuItem>
       <MenuItem Header="关于">
         <MenuItem Header="设置" Click="Setting_OnClick"></MenuItem>
-        <MenuItem Header="关于"></MenuItem>
+        <MenuItem Header="关于" Click="About_OnClick"></MenuItem>
       </MenuItem>
     </Menu>
     <WrapPanel Name="PhoneViewContainer" Grid.Row="1">
