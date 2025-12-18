@@ -55,7 +55,9 @@ public partial class AutoCallWindow : Window
 
     private void SaveSetting_OnClick(object? sender, RoutedEventArgs e)
     {
-
+        AppConfig.Instance.SaveAutomation("Call", _vm.CallGroup);
+        AppConfig.Instance.SaveAutomation("Pickup", _vm.PickupGroup);
+        Close();
     }
 
     private void RemoveCaller_OnClick(object? sender, RoutedEventArgs e)
@@ -115,5 +117,24 @@ public class AutoGroupItem : BaseViewModel
     {
         get => Get<int>();
         set => Set(value);
+    }
+
+    public override string ToString()
+    {
+        return $"{Number},{TargetNumber},{Delay}";
+    }
+
+    public static bool TryParse(string value, out AutoGroupItem? groupItem)
+    {
+        groupItem = null;
+        var items = value.Split(",");
+        if (items.Length != 3) return false;
+        groupItem = new AutoGroupItem()
+        {
+            Number = items[0],
+            TargetNumber = items[1],
+            Delay = int.Parse(items[2])
+        };
+        return true;
     }
 }

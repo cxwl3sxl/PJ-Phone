@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using IniParser;
 using System.IO;
+using System.Linq;
 using IniParser.Model;
 
 namespace SoftPhone
@@ -44,6 +47,26 @@ namespace SoftPhone
         public void Save()
         {
             _parser.WriteFile("config.ini", _data);
+        }
+
+        public void SaveAutomation(string group, IEnumerable<AutoGroupItem> configs)
+        {
+            _data["Automation"][group] = string.Join("|", configs.Select(a => a.ToString()));
+            Save();
+        }
+
+        public IEnumerable<AutoGroupItem> GetAutomation(string group)
+        {
+            var configs = _data["Automation"][group];
+            if (string.IsNullOrWhiteSpace(configs)) yield break;
+            var items = configs.Split("|", StringSplitOptions.RemoveEmptyEntries);
+            foreach (var item in items)
+            {
+                if (AutoGroupItem.TryParse(item, out var groupItem))
+                {
+                    yield return groupItem!;
+                }
+            }
         }
     }
 }

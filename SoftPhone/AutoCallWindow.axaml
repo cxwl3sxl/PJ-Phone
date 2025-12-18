@@ -6,7 +6,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SoftPhone.AutoCallWindow"
         x:DataType="softPhone:AutoCallWindowViewModel"
-        Title="AutoCallWindow">
+        WindowStartupLocation="CenterScreen"
+        Title="自动化配置">
   <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,*,Auto">
     <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">号码清单：</Label>
     <ComboBox ItemsSource="{Binding Profiles}"
