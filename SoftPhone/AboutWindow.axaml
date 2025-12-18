@@ -15,6 +15,7 @@
     <Label>pjsip：https://www.pjsip.org/</Label>
     <Label>MessageBox.Avalonia：https://github.com/AvaloniaCommunity/MessageBox.Avalonia</Label>
     <Label>ini-parser：https://github.com/rickyah/ini-parser</Label>
+    <Label>源代码：https://github.com/cxwl3sxl/PJ-Phone.git</Label>
     <Button HorizontalAlignment="Center"
             Margin="10"
             Click="Close_OnClick">确定</Button>
