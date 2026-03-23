@@ -13,6 +13,7 @@ public class SipCall : Call
 {
     private readonly string? _soundDir;
     private readonly AudioMediaRecorder? _audioMediaRecorder;
+    private AudioMediaPlayer? _audioMediaPlayer;
     private readonly AutoResetEvent _hangupResetEvent = new AutoResetEvent(false);
     private bool _isDisposed;
     private readonly object _lock = new object();
@@ -140,10 +141,41 @@ public class SipCall : Call
     /// <summary>
     /// 向当前通话播放媒体文件
     /// </summary>
-    /// <param name="media">媒体文件地址</param>
+    /// <param name="media">媒体文件地址<br/>
+    /// 格式要求：<br/>
+    ///  - 采样率：16000 Hz<br/>
+    ///  - 声道数：1（单声道）<br/>
+    ///  - 编码：16-bit PCM<br/>
+    ///  - 格式：标准 WAV 文件<br/>
+    /// <code>ffmpeg -i input.mp3 -ar 16000 -ac 1 -f wav output.wav</code>
+    /// </param>
     public void Play(string media)
     {
-        throw new NotImplementedException();
+        if (_isDisposed) return;
+
+        // 获取通话信息
+        var ci = getInfo();
+        if (ci == null) return;
+        if (ci.state != pjsip_inv_state.PJSIP_INV_STATE_CONFIRMED) return;
+
+        // 查找音频媒体
+        AudioMedia? audioMedia = null;
+        for (var i = 0; i < ci.media.Count; i++)
+        {
+            var cmi = ci.media[i];
+            if (cmi.type != pjmedia_type.PJMEDIA_TYPE_AUDIO) continue;
+            audioMedia = getAudioMedia(i);
+            break;
+        }
+
+        if (audioMedia == null) return;
+
+        // 创建播放器
+        _audioMediaPlayer = new AudioMediaPlayer();
+        _audioMediaPlayer.createPlayer(media);
+
+        // 将播放器传输到通话音频媒体
+        _audioMediaPlayer.startTransmit(audioMedia);
     }
 
     #endregion
@@ -272,6 +304,7 @@ public class SipCall : Call
         _hangupResetEvent.Set();
         _hangupResetEvent.Dispose();
         _audioMediaRecorder?.Dispose();
+        _audioMediaPlayer?.Dispose();
         base.Dispose(disposing);
     }
 
