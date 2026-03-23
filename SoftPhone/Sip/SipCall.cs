@@ -137,6 +137,15 @@ public class SipCall : Call
         return _hangupResetEvent.WaitOne(millisecondsTimeout);
     }
 
+    /// <summary>
+    /// 向当前通话播放媒体文件
+    /// </summary>
+    /// <param name="media">媒体文件地址</param>
+    public void Play(string media)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 
     #region 私有方法
