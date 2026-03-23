@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Input;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -209,6 +211,17 @@ namespace SoftPhone
         {
             ActionLabel = HangUp;
             PhoneStatusColor = _green;
+            try
+            {
+                if (File.Exists("say.wav"))
+                {
+                    _phone?.Play("say.wav");
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"播放录音出错:{ex.Message}");
+            }
         }
 
         #endregion

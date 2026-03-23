@@ -20,6 +20,7 @@ namespace SoftPhone.PjPhone
         #endregion
 
         private SipAccount? _account;
+        private SipCall? _currentCall;
 
         #region IPhone
 
@@ -49,6 +50,11 @@ namespace SoftPhone.PjPhone
             _account?.Call(number);
         }
 
+        public void Play(string audioFile)
+        {
+            _currentCall?.Play(audioFile);
+        }
+
         public void Hangup()
         {
             _account?.Hangup();
@@ -75,9 +81,11 @@ namespace SoftPhone.PjPhone
             switch (e.State)
             {
                 case CallState.Connected:
+                    _currentCall = e;
                     OnCallConnected?.Invoke();
                     break;
                 case CallState.DisConnected:
+                    _currentCall = null;
                     OnCallHangup?.Invoke();
                     break;
             }

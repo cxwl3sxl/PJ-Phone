@@ -16,6 +16,8 @@ namespace SoftPhone
 
         void Call(string number);
 
+        void Play(string audioFile);
+
         void Hangup();
 
         void Pickup();
