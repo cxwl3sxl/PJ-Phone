@@ -185,6 +185,7 @@
                  Grid.ColumnSpan="2"
                  Background="{Binding PhoneStatusColor}"
                  Classes="PhoneNumber"
+                 Watermark="请拨号"
                  Text="{Binding PhoneStatus}"></TextBox>
         </Grid>
       </Border>
