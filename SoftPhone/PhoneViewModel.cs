@@ -4,7 +4,8 @@ using System.IO;
 using System.Windows.Input;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using SoftPhone.PjPhone;
+using PJ.SoftPhoneSdk;
+using PJ.SoftPhoneSdk.PjPhone;
 
 namespace SoftPhone
 {

@@ -1,4 +1,4 @@
-namespace SoftPhone.Sip;
+namespace PJ.SoftPhoneSdk.Sip;
 
 /// <summary>
 /// 账号注册状态发生变更

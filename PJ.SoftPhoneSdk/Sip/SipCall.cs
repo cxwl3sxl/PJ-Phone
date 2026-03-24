@@ -1,10 +1,6 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
 using pj;
 
-namespace SoftPhone.Sip;
+namespace PJ.SoftPhoneSdk.Sip;
 
 /// <summary>
 /// 呼叫信息

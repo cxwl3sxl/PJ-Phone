@@ -1,9 +1,6 @@
-using System;
-using System.IO;
-using System.Threading;
 using pj;
 
-namespace SoftPhone.Sip;
+namespace PJ.SoftPhoneSdk.Sip;
 
 /// <summary>
 /// SIP账号

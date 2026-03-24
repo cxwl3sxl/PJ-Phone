@@ -1,4 +1,4 @@
-namespace SoftPhone.Sip;
+namespace PJ.SoftPhoneSdk.Sip;
 
 /// <summary>
 /// 通话方向

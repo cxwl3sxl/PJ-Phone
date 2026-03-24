@@ -1,8 +1,7 @@
-using System;
 using System.Diagnostics;
 using pj;
 
-namespace SoftPhone.Sip;
+namespace PJ.SoftPhoneSdk.Sip;
 
 class ConsoleLogWriter : LogWriter
 {

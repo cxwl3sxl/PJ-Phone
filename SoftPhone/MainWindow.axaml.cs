@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using PJ.SoftPhoneSdk.PjPhone;
 using SoftPhone.Automation;
 
 namespace SoftPhone
@@ -19,6 +20,7 @@ namespace SoftPhone
         public MainWindow()
         {
             InitializeComponent();
+            PhoneApp.Init(!AppConfig.Instance.NoSoundDevice);
         }
 
         public IEnumerable<PhoneProfile> Profiles
