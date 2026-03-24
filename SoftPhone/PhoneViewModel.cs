@@ -42,6 +42,10 @@ namespace SoftPhone
             _phone.OnIncomingCall += _phone_OnIncomingCall;
             _phone.OnRegistrationStateChanged += _phone_OnRegistrationStateChanged;
             _phone.Login(Profile.Server!, Profile.Port!.Value, Profile.Number!, Profile.Password!);
+            if (Profile.Record)
+            {
+                _phone.SetRecordingFileDir($"./recording/{Profile.Number}");
+            }
         }
 
         public PhoneProfile Profile { get; }
@@ -219,9 +223,10 @@ namespace SoftPhone
             PhoneStatusColor = _green;
             try
             {
-                if (File.Exists("say.wav"))
+                if (Profile.AutoPlay == null) return;
+                if (File.Exists(Profile.AutoPlay))
                 {
-                    _phone?.Play("say.wav");
+                    _phone?.Play(Profile.AutoPlay);
                 }
             }
             catch (Exception ex)

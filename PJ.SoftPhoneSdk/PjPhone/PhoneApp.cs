@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using pj;
+using System.Xml.Linq;
 using PJ.SoftPhoneSdk.Sip;
 
 namespace PJ.SoftPhoneSdk.PjPhone;
@@ -49,6 +51,13 @@ public class PhoneApp : IPhone
         _account.OnCalling += _account_OnCalling;
         _account.OnCallStateChanged += _account_OnCallStateChanged;
     }
+
+    public void SetRecordingFileDir(string dir)
+    {
+        if (_account == null) throw new InvalidOperationException("必须先调用login方法");
+        _account.SetRecordStoreDir(dir);
+    }
+
 
     public string? Name
     {

@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Text.Json;
 using Avalonia.Controls;
-using Avalonia.Dialogs;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using MsBox.Avalonia;
 
 namespace SoftPhone;
@@ -65,8 +65,25 @@ public partial class EditProfile : Window
         Close();
     }
 
-    private void OpenWav_OnClick(object? sender, RoutedEventArgs e)
+    private async void OpenWav_OnClick(object? sender, RoutedEventArgs e)
     {
-        //TODO: 选择wav文件，并且将选中的值填入 _profile.AutoPlay 中
+        var options = new FilePickerOpenOptions
+        {
+            Title = "选择WAV文件(单声道|16000 Hz|16-bit PCM)",
+            AllowMultiple = false,
+            FileTypeFilter =
+            [
+                new FilePickerFileType("WAV音频文件")
+                {
+                    Patterns = ["*.wav"]
+                }
+            ]
+        };
+
+        var files = await StorageProvider.OpenFilePickerAsync(options);
+        if (files.Count > 0)
+        {
+            _profile!.AutoPlay = files[0].Path.LocalPath;
+        }
     }
 }

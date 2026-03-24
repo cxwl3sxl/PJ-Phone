@@ -38,6 +38,12 @@ namespace PJ.SoftPhoneSdk
         void Login(string server, int port, string number, string password);
 
         /// <summary>
+        /// 设置录音文件保存目录
+        /// </summary>
+        /// <param name="dir">文件存储目录</param>
+        void SetRecordingFileDir(string dir);
+
+        /// <summary>
         /// 当前电话名称
         /// </summary>
         string? Name { get; set; }

@@ -110,7 +110,6 @@ public static class SipPhone
             if (account != null) return account;
 
             account = new SipAccount(name, password, host, port);
-            account.SetRecordStoreDir($"./recording/{name}");
             SipAccounts.Add(account);
         }
 
