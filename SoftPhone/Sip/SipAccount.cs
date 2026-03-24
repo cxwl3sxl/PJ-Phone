@@ -69,7 +69,7 @@ public class SipAccount : Account
     /// <param name="dir">目录地址</param>
     public SipAccount SetRecordStoreDir(string dir)
     {
-        if (!Directory.Exists(dir)) throw new DirectoryNotFoundException(nameof(dir));
+        if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
         _soundStoreDir = dir;
         return this;
     }
