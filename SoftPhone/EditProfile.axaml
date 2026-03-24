@@ -18,7 +18,7 @@
       <Setter Property="Margin" Value="2"></Setter>
     </Style>
   </Window.Styles>
-  <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,200">
+  <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,200">
     <TextBlock Grid.Row="0" Grid.Column="0">话机名称：</TextBlock>
     <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}"></TextBox>
 
@@ -34,7 +34,14 @@
     <TextBlock Grid.Row="4" Grid.Column="0">端口：</TextBlock>
     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Port}"></TextBox>
 
-    <Button Grid.Row="5"
+    <TextBlock Grid.Row="5" Grid.Column="0">保存录音：</TextBlock>
+    <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding Record}"></CheckBox>
+
+    <TextBlock Grid.Row="6" Grid.Column="0">自动播放：</TextBlock>
+    <TextBox Grid.Row="6" Grid.Column="1" Margin="0 0 35 0" Text="{Binding AutoPlay}"></TextBox>
+    <Button Grid.Row="6" Grid.Column="1" Width="30" VerticalAlignment="Center" HorizontalAlignment="Right">...</Button>
+
+    <Button Grid.Row="7"
             Grid.Column="0"
             Margin="0 10 0 0"
             Grid.ColumnSpan="2"
@@ -42,5 +49,6 @@
             Click="Save_OnClick">
       确定
     </Button>
+
   </Grid>
 </Window>

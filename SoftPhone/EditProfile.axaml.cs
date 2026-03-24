@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using Avalonia.Controls;
+using Avalonia.Dialogs;
 using Avalonia.Interactivity;
 using MsBox.Avalonia;
 
@@ -53,7 +54,7 @@ public partial class EditProfile : Window
         if (_beforeSave?.Invoke() == false)
         {
             await MessageBoxManager
-                .GetMessageBoxStandard("温馨提示", "同服务器下已注册相同分级，无法重复注册！")
+                .GetMessageBoxStandard("温馨提示", "同服务器下已注册相同分机，无法重复注册！")
                 .ShowAsync();
             return;
         }
@@ -62,5 +63,10 @@ public partial class EditProfile : Window
         await File.WriteAllTextAsync(file, JsonSerializer.Serialize(_profile));
         _afterSave?.Invoke(_profile);
         Close();
+    }
+
+    private void OpenWav_OnClick(object? sender, RoutedEventArgs e)
+    {
+        //TODO: 选择wav文件，并且将选中的值填入 _profile.AutoPlay 中
     }
 }

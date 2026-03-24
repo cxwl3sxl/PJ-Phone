@@ -32,6 +32,18 @@ namespace SoftPhone
             set => Set(value);
         }
 
+        public bool Record
+        {
+            get => Get<bool>();
+            set => Set(value);
+        }
+
+        public string? AutoPlay
+        {
+            get => Get<string>();
+            set => Set(value);
+        }
+
         public override string ToString()
         {
             return $"{Name}-{Number}";
