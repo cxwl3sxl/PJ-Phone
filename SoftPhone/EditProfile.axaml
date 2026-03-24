@@ -39,7 +39,7 @@
 
     <TextBlock Grid.Row="6" Grid.Column="0">自动播放：</TextBlock>
     <TextBox Grid.Row="6" Grid.Column="1" Margin="0 0 35 0" Text="{Binding AutoPlay}"></TextBox>
-    <Button Grid.Row="6" Grid.Column="1" Width="30" VerticalAlignment="Center" HorizontalAlignment="Right">...</Button>
+    <Button Grid.Row="6" Grid.Column="1" Width="30" VerticalAlignment="Center" HorizontalAlignment="Right" Click="OpenWav_OnClick">...</Button>
 
     <Button Grid.Row="7"
             Grid.Column="0"
