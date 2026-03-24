@@ -19,6 +19,7 @@ namespace SoftPhone
         private const string Call = "呼叫";
 
         private IPhone? _phone;
+        private string? _lastCall;
 
         public PhoneViewModel(PhoneProfile profile)
         {
@@ -170,10 +171,14 @@ namespace SoftPhone
                 case Call:
                     if (!string.IsNullOrWhiteSpace(PhoneStatus))
                     {
+                        _lastCall = PhoneStatus;
                         _phone?.Call(PhoneStatus);
                         ActionLabel = HangUp;
                         PhoneStatusColor = _red;
+                        return;
                     }
+
+                    PhoneStatus = _lastCall;
 
                     break;
                 case PickUp:
