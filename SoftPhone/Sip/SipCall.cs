@@ -174,8 +174,14 @@ public class SipCall : Call
         _audioMediaPlayer = new AudioMediaPlayer();
         _audioMediaPlayer.createPlayer(media);
 
-        // 将播放器传输到通话音频媒体
+        // 将播放器传输到通话音频媒体（发送给对方）
         _audioMediaPlayer.startTransmit(audioMedia);
+
+        // 如果启用了录音，也将播放器传输到录音器（录制播放的声音）
+        if (_audioMediaRecorder != null)
+        {
+            _audioMediaPlayer.startTransmit(_audioMediaRecorder);
+        }
     }
 
     #endregion
@@ -197,10 +203,11 @@ public class SipCall : Call
 
         if (state != pjsip_inv_state.PJSIP_INV_STATE_CONNECTING) return;
 
-        //录音
+        //录音：同时录制通话对方的声音和本地麦克风的声音
         if (_audioMediaRecorder != null)
         {
             Console.WriteLine($"连接录音文件 {state} {CallId}...");
+            //audioMedia 对方的声音，录制他
             audioMedia?.startTransmit(_audioMediaRecorder);
         }
 
@@ -210,6 +217,11 @@ public class SipCall : Call
         var captureDevMedia = audDevManager.getCaptureDevMedia();
         if (audioMedia == null || captureDevMedia == null) return;
 
+        if (_audioMediaRecorder != null)
+        {
+            //录制本地麦克风的声音
+            captureDevMedia.startTransmit(_audioMediaRecorder);
+        }
 
 
         // This will connect the sound device/mic to the call audio media
