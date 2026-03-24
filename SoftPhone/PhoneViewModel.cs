@@ -36,6 +36,7 @@ namespace SoftPhone
             ActionLabel = Call;
             IsOnline = false;
             IsLogging = true;
+            IsRecordingEnabled = Profile.Record;
             _phone = new PhoneApp();
             _phone.OnCallConnected += _phone_OnCallConnected;
             _phone.OnCallHangup += _phone_OnCallHangup;
@@ -102,6 +103,12 @@ namespace SoftPhone
         }
 
         public bool IsRobot
+        {
+            get => Get<bool>();
+            set => Set(value);
+        }
+
+        public bool IsRecordingEnabled
         {
             get => Get<bool>();
             set => Set(value);
