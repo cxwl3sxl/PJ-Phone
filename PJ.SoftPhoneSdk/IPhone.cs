@@ -52,7 +52,8 @@ namespace PJ.SoftPhoneSdk
         /// 呼叫某个号码
         /// </summary>
         /// <param name="number">目标号码</param>
-        void Call(string number);
+        /// <returns>当前录音文件路径，NULL则表示不录音</returns>
+        string? Call(string number);
 
         /// <summary>
         /// 在当前通话中播放录音文件

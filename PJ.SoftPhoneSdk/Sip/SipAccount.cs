@@ -1,4 +1,5 @@
 using pj;
+using PJ.SoftPhoneSdk.PjPhone;
 
 namespace PJ.SoftPhoneSdk.Sip;
 
@@ -125,8 +126,10 @@ public class SipAccount : Account
         lock (_lock)
         {
             if (_lastCall != null) return null;
-            _lastCall = new SipCall(this, CallDirection.OutGoing, _soundStoreDir);
+            _lastCall = new SipCall(this, CallDirection.OutGoing);
         }
+
+        _lastCall.SetRecordingFile(BuildRecordingFilePath(_name, dstNumber));
 
         Console.WriteLine(
             $"=========> 正在发起呼叫[{Thread.CurrentThread.Name ?? $"{Thread.CurrentThread.ManagedThreadId}"}] :{_lastCall.CallId} -> {dstNumber}");
@@ -182,7 +185,15 @@ public class SipAccount : Account
         lock (_lock)
         {
             //本地忙时，来电直接挂断
-            var call = new SipCall(this, CallDirection.InComing, prm.callId, _soundStoreDir);
+            var call = new SipCall(this, CallDirection.InComing, prm.callId);
+            var file = BuildRecordingFilePath("$SOURCE", _name);
+            if (file != null)
+            {
+                var number = PhoneApp.NumberRegex.Match(call.getInfo().remoteUri).Value;
+                file = file.Replace("$SOURCE", number.Replace("\"", ""));
+            }
+
+            call.SetRecordingFile(file);
             HookCall(call);
             if (_lastCall != null)
             {
@@ -195,6 +206,7 @@ public class SipAccount : Account
 
             _lastCall = call;
         }
+
         OnCalling?.Invoke(this, _lastCall);
     }
 
@@ -235,7 +247,7 @@ public class SipAccount : Account
 
     private void Call_OnCallStateChanged(object? sender, CallState e)
     {
-        if(!(sender is SipCall call))return;
+        if (!(sender is SipCall call)) return;
         OnCallStateChanged?.Invoke(this, call);
         if (call.State != CallState.DisConnected) return;
         lock (_lock)
@@ -246,6 +258,14 @@ public class SipAccount : Account
                 _lastCall = null;
             }
         }
+    }
+
+    string? BuildRecordingFilePath(string caller, string called)
+    {
+        if (_soundStoreDir == null) return null;
+        var recordingDir = Path.Combine(_soundStoreDir, $"{DateTime.Now:yyyy-MM-dd}");
+        if (!Directory.Exists(recordingDir)) Directory.CreateDirectory(recordingDir);
+        return Path.Combine(recordingDir, $"{DateTime.Now:HH_mm_ss_fff}_{caller}_{called}.wav");
     }
 
     #endregion

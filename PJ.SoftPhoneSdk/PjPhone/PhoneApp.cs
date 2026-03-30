@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using pj;
-using System.Xml.Linq;
 using PJ.SoftPhoneSdk.Sip;
 
 namespace PJ.SoftPhoneSdk.PjPhone;
@@ -23,7 +21,7 @@ public class PhoneApp : IPhone
         SipPhone.Init(Thread.CurrentThread, !hasSoundDevice);
     }
 
-    private static readonly Regex NumberRegex = new Regex("\"\\d+\"");
+    internal static readonly Regex NumberRegex = new Regex("\"\\d+\"");
 
     #endregion
 
@@ -65,9 +63,10 @@ public class PhoneApp : IPhone
         set => _account?.SetDisplayName(value!);
     }
 
-    public void Call(string number)
+    public string? Call(string number)
     {
         _account?.Call(number);
+        return null;
     }
 
     public void Play(string audioFile)

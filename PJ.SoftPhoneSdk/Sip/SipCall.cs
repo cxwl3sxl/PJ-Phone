@@ -7,12 +7,14 @@ namespace PJ.SoftPhoneSdk.Sip;
 /// </summary>
 public class SipCall : Call
 {
-    private readonly string? _soundDir;
-    private readonly AudioMediaRecorder? _audioMediaRecorder;
-    private AudioMediaPlayer? _audioMediaPlayer;
+    private readonly AudioMediaRecorder _audioMediaRecorder;
     private readonly AutoResetEvent _hangupResetEvent = new AutoResetEvent(false);
-    private bool _isDisposed;
     private readonly object _lock = new object();
+
+    private AudioMediaPlayer? _audioMediaPlayer;
+    private bool _isDisposed;
+    private string? _recordingFilePath;
+
 
     #region 事件
 
@@ -30,14 +32,10 @@ public class SipCall : Call
     /// </summary>
     /// <param name="account">账号</param>
     /// <param name="direction">通话方向</param>
-    /// <param name="soundDir">录音存放位置，null则不存储</param>
-    internal SipCall(SipAccount account, CallDirection direction, string? soundDir = null) : base(account)
+    internal SipCall(SipAccount account, CallDirection direction) : base(account)
     {
-        _soundDir = soundDir;
         Direction = direction;
-        if (soundDir == null) return;
         _audioMediaRecorder = new AudioMediaRecorder();
-        _soundDir = InitStoreDir(soundDir);
     }
 
     /// <summary>
@@ -46,16 +44,12 @@ public class SipCall : Call
     /// <param name="account">账号</param>
     /// <param name="direction">通话方向</param>
     /// <param name="id">通话编号</param>
-    /// <param name="soundDir">录音存放位置，null则不存储</param>
-    internal SipCall(SipAccount account, CallDirection direction, int id, string? soundDir = null) : base(account,
+    internal SipCall(SipAccount account, CallDirection direction, int id) : base(account,
         id)
     {
-        _soundDir = soundDir;
         Direction = direction;
         CallId = getInfo().callIdString;
-        if (soundDir == null) return;
         _audioMediaRecorder = new AudioMediaRecorder();
-        _soundDir = InitStoreDir(soundDir);
     }
 
     #endregion
@@ -78,9 +72,9 @@ public class SipCall : Call
     public string? CallId { get; private set; }
 
     /// <summary>
-    /// 获取当前呼叫对应的录音文件，可能为NULL，表示不用录音
+    /// 当前通话录音文件
     /// </summary>
-    public string? RecordFile { get; private set; }
+    public string? RecordingFile => _recordingFilePath;
 
     #endregion
 
@@ -135,6 +129,15 @@ public class SipCall : Call
     }
 
     /// <summary>
+    /// 设置录音文件位置
+    /// </summary>
+    /// <param name="filePath">录音文件路径,null表示不录音，默认不录音</param>
+    public void SetRecordingFile(string? filePath)
+    {
+        _recordingFilePath = filePath;
+    }
+
+    /// <summary>
     /// 向当前通话播放媒体文件
     /// </summary>
     /// <param name="media">媒体文件地址<br/>
@@ -174,23 +177,12 @@ public class SipCall : Call
         _audioMediaPlayer.startTransmit(audioMedia);
 
         // 如果启用了录音，也将播放器传输到录音器（录制播放的声音）
-        if (_audioMediaRecorder != null)
-        {
-            _audioMediaPlayer.startTransmit(_audioMediaRecorder);
-        }
+        _audioMediaPlayer.startTransmit(_audioMediaRecorder);
     }
 
     #endregion
 
     #region 私有方法
-
-    string InitStoreDir(string storeDir)
-    {
-        var dir = Path.Combine(storeDir, $"{DateTime.Now:yyyy-MM-dd}");
-        if (Directory.Exists(dir)) return dir;
-        Directory.CreateDirectory(dir);
-        return dir;
-    }
 
     private void ConnectAudioDevice(AudioMedia? audioMedia, pjsip_inv_state state)
     {
@@ -200,12 +192,9 @@ public class SipCall : Call
         if (state != pjsip_inv_state.PJSIP_INV_STATE_CONNECTING) return;
 
         //录音：同时录制通话对方的声音和本地麦克风的声音
-        if (_audioMediaRecorder != null)
-        {
-            Console.WriteLine($"连接录音文件 {state} {CallId}...");
-            //audioMedia 对方的声音，录制他
-            audioMedia?.startTransmit(_audioMediaRecorder);
-        }
+        Console.WriteLine($"连接录音文件 {state} {CallId}...");
+        //audioMedia 对方的声音，录制他
+        audioMedia?.startTransmit(_audioMediaRecorder);
 
         if (!SipPhone.HasSoundDevice) return;
         //本地回放与采集
@@ -213,12 +202,8 @@ public class SipCall : Call
         var captureDevMedia = audDevManager.getCaptureDevMedia();
         if (audioMedia == null || captureDevMedia == null) return;
 
-        if (_audioMediaRecorder != null)
-        {
-            //录制本地麦克风的声音
-            captureDevMedia.startTransmit(_audioMediaRecorder);
-        }
-
+        //录制本地麦克风的声音
+        captureDevMedia.startTransmit(_audioMediaRecorder);
 
         // This will connect the sound device/mic to the call audio media
         captureDevMedia.startTransmit(audioMedia);
@@ -254,11 +239,10 @@ public class SipCall : Call
         switch (ci.state)
         {
             case pjsip_inv_state.PJSIP_INV_STATE_CALLING:
-                if (_audioMediaRecorder != null)
+                if (_recordingFilePath != null)
                 {
-                    Console.WriteLine($"正在创建录音文件 {CallId} ...");
-                    RecordFile = Path.Combine(_soundDir!, $"{DateTime.Now:HH_mm_ss}_{CallId}.wav");
-                    _audioMediaRecorder.createRecorder(RecordFile);
+                    Console.WriteLine($"正在写入录音文件 {_recordingFilePath} ...");
+                    _audioMediaRecorder.createRecorder(_recordingFilePath);
                 }
 
                 break;
@@ -311,7 +295,7 @@ public class SipCall : Call
 
         _hangupResetEvent.Set();
         _hangupResetEvent.Dispose();
-        _audioMediaRecorder?.Dispose();
+        _audioMediaRecorder.Dispose();
         _audioMediaPlayer?.Dispose();
         base.Dispose(disposing);
     }
