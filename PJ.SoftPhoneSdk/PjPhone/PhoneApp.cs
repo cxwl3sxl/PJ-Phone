@@ -11,14 +11,14 @@ public class PhoneApp : IPhone
 {
     #region static
 
-
     /// <summary>
     /// 初始化
     /// </summary>
     /// <param name="hasSoundDevice">设置当前设备是否有音频设备</param>
-    public static void Init(bool hasSoundDevice)
+    /// <param name="logger">日志对象，如果不传或传NULL，将使用内部默认日志对象</param>
+    public static void Init(bool hasSoundDevice, IPhoneLogger? logger = null)
     {
-        SipPhone.Init(Thread.CurrentThread, !hasSoundDevice);
+        SipPhone.Init(Thread.CurrentThread, !hasSoundDevice, logger);
     }
 
     internal static readonly Regex NumberRegex = new Regex("\"\\d+\"");
