@@ -5,7 +5,7 @@ namespace PJ.SoftPhoneSdk.Sip;
 /// <summary>
 /// 呼叫信息
 /// </summary>
-public class SipCall : Call
+class SipCall : Call
 {
     private readonly AudioMediaRecorder _audioMediaRecorder;
     private readonly AutoResetEvent _hangupResetEvent = new AutoResetEvent(false);

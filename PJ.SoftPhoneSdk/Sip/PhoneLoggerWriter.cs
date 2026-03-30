@@ -1,10 +1,10 @@
-using System.Diagnostics;
 using pj;
 
 namespace PJ.SoftPhoneSdk.Sip;
 
-class ConsoleLogWriter : LogWriter
+class PhoneLoggerWriter(IPhoneLogger logger) : LogWriter
 {
+
     public override void write(LogEntry entry)
     {
         /*
@@ -19,27 +19,22 @@ class ConsoleLogWriter : LogWriter
         switch (entry.level)
         {
             case 0:
-                WriteLogEntry(entry, "fatal", msg => Trace.TraceError(msg));
+                logger.Fatal(entry.threadId, entry.threadName, entry.msg);
                 break;
             case 1:
-                WriteLogEntry(entry, "error", msg => Trace.TraceError(msg));
+                logger.Error(entry.threadId, entry.threadName, entry.msg);
                 break;
             case 2:
-                WriteLogEntry(entry, "warn", msg => Trace.TraceWarning(msg));
+                logger.Warn(entry.threadId, entry.threadName, entry.msg);
                 break;
             case 3:
-                WriteLogEntry(entry, "info", msg => Trace.TraceInformation(msg));
+                logger.Info(entry.threadId, entry.threadName, entry.msg);
                 break;
             case 4:
             case 5:
             case 6:
-                WriteLogEntry(entry, "debug", msg => Trace.WriteLine(msg));
+                logger.Debug(entry.threadId, entry.threadName, entry.msg);
                 break;
         }
-    }
-
-    void WriteLogEntry(LogEntry entry, string level, Action<string> func)
-    {
-        func($"[{entry.threadId} {entry.threadName}] [{level}] {entry.msg}");
     }
 }

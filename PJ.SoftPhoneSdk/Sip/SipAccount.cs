@@ -6,7 +6,7 @@ namespace PJ.SoftPhoneSdk.Sip;
 /// <summary>
 /// SIP账号
 /// </summary>
-public class SipAccount : Account
+class SipAccount : Account
 {
     #region 内部变量
 

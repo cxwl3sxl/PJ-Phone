@@ -3,7 +3,7 @@ namespace PJ.SoftPhoneSdk.Sip;
 /// <summary>
 /// 通话方向
 /// </summary>
-public enum CallDirection
+enum CallDirection
 {
     /// <summary>
     /// 来电
@@ -19,7 +19,7 @@ public enum CallDirection
 /// <summary>
 /// 通话状态
 /// </summary>
-public enum CallState
+enum CallState
 {
     /// <summary>
     /// 未知状态

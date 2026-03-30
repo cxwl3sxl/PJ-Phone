@@ -30,6 +30,7 @@ public class PhoneApp : IPhone
 
     #region IPhone
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (_account == null) return;
@@ -40,6 +41,7 @@ public class PhoneApp : IPhone
         SipPhone.RemoveAccount(_account);
     }
 
+    /// <inheritdoc />
     public void Login(string server, int port, string number, string password)
     {
         _account = SipPhone
@@ -50,6 +52,7 @@ public class PhoneApp : IPhone
         _account.OnCallStateChanged += _account_OnCallStateChanged;
     }
 
+    /// <inheritdoc />
     public void SetRecordingFileDir(string dir)
     {
         if (_account == null) throw new InvalidOperationException("必须先调用login方法");
@@ -57,37 +60,49 @@ public class PhoneApp : IPhone
     }
 
 
+    /// <inheritdoc />
     public string? Name
     {
         get => _account?.Name;
         set => _account?.SetDisplayName(value!);
     }
 
+    /// <inheritdoc />
     public string? Call(string number)
     {
         _account?.Call(number);
         return null;
     }
 
+    /// <inheritdoc />
     public void Play(string audioFile)
     {
         _currentCall?.Play(audioFile);
     }
 
+    /// <inheritdoc />
     public void Hangup()
     {
         _account?.Hangup();
         OnCallHangup?.Invoke();
     }
 
+    /// <inheritdoc />
     public void Pickup()
     {
         _account?.Pickup();
     }
 
+    /// <inheritdoc />
     public event RegistrationStateChanged? OnRegistrationStateChanged;
+
+    /// <inheritdoc />
     public event IncomingCall? OnIncomingCall;
+
+    /// <inheritdoc />
     public event CallConnected? OnCallConnected;
+
+    /// <inheritdoc />
     public event CallHangup? OnCallHangup;
 
     #endregion

@@ -6,7 +6,7 @@ namespace PJ.SoftPhoneSdk.Sip;
 /// <summary>
 /// SIP电话
 /// </summary>
-public static class SipPhone
+static class SipPhone
 {
     #region 内部变量
 
@@ -14,7 +14,7 @@ public static class SipPhone
     private static readonly List<SipAccount> SipAccounts = new List<SipAccount>();
     private static Endpoint? _endpoint;
     private static int _transportId;
-    private static readonly ConsoleLogWriter Logger = new ConsoleLogWriter();
+    private static PhoneLoggerWriter? _logger;
 
     #endregion
 
@@ -58,13 +58,16 @@ public static class SipPhone
     /// </summary>
     /// <param name="thread">初始化该电话的线程</param>
     /// <param name="setNoSoundDevice">是否设置为没有声卡的模式，该模式下，将不会通过电脑声卡播放采集声音</param>
-    public static void Init(Thread thread, bool setNoSoundDevice)
+    /// <param name="logger">日志程序, 不传或传NULL将使用内部默认程序进行记录</param>
+    public static void Init(Thread thread, bool setNoSoundDevice, IPhoneLogger? logger = null)
     {
         lock (Lock)
         {
             if (_endpoint != null) return;
             _endpoint = new Endpoint();
         }
+
+        _logger = new PhoneLoggerWriter(logger ?? new TracePhoneLogger());
 
         HasSoundDevice = !setNoSoundDevice;
 
@@ -242,7 +245,7 @@ public static class SipPhone
                 level = 5,
                 //consoleLevel = 2,
                 //filename = Path.Combine("PJ.Cti.DialTest.Host.logs", $"pjsip-{DateTime.Now:yyyy-MM-dd}.log")
-                writer = Logger
+                writer = _logger
             }
         };
         return epConfig;
