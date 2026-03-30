@@ -70,8 +70,7 @@ public class PhoneApp : IPhone
     /// <inheritdoc />
     public string? Call(string number)
     {
-        _account?.Call(number);
-        return null;
+        return _account?.Call(number)?.RecordingFile;
     }
 
     /// <inheritdoc />
