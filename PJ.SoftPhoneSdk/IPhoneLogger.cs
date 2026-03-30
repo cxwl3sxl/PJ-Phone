@@ -11,7 +11,7 @@ public interface IPhoneLogger
     /// <param name="threadName">线程名称</param>
     /// <param name="message">消息内容</param>
     /// <param name="threadId">线程编号</param>
-    void Fatal(int threadId, string threadName, string message);
+    void Fatal(int threadId, string? threadName, string message);
 
     /// <summary>
     /// 普通错误级别消息
@@ -19,7 +19,7 @@ public interface IPhoneLogger
     /// <param name="threadName">线程名称</param>
     /// <param name="message">消息内容</param>
     /// <param name="threadId">线程编号</param>
-    void Error(int threadId, string threadName, string message);
+    void Error(int threadId, string? threadName, string message);
 
     /// <summary>
     /// 警告级别消息
@@ -27,7 +27,7 @@ public interface IPhoneLogger
     /// <param name="threadName">线程名称</param>
     /// <param name="message">消息内容</param>
     /// <param name="threadId">线程编号</param>
-    void Warn(int threadId, string threadName, string message);
+    void Warn(int threadId, string? threadName, string message);
 
     /// <summary>
     /// 普通日志
@@ -35,7 +35,7 @@ public interface IPhoneLogger
     /// <param name="threadName">线程名称</param>
     /// <param name="message">消息内容</param>
     /// <param name="threadId">线程编号</param>
-    void Info(int threadId, string threadName, string message);
+    void Info(int threadId, string? threadName, string message);
 
     /// <summary>
     /// 调试日志
@@ -43,5 +43,5 @@ public interface IPhoneLogger
     /// <param name="threadName">线程名称</param>
     /// <param name="message">消息内容</param>
     /// <param name="threadId">线程编号</param>
-    void Debug(int threadId, string threadName, string message);
+    void Debug(int threadId, string? threadName, string message);
 }

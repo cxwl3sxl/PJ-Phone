@@ -7,6 +7,7 @@ namespace PJ.SoftPhoneSdk.Sip;
 /// </summary>
 class SipCall : Call
 {
+    private readonly IPhoneLogger _logger;
     private readonly AudioMediaRecorder _audioMediaRecorder;
     private readonly AutoResetEvent _hangupResetEvent = new AutoResetEvent(false);
     private readonly object _lock = new object();
@@ -32,8 +33,10 @@ class SipCall : Call
     /// </summary>
     /// <param name="account">账号</param>
     /// <param name="direction">通话方向</param>
-    internal SipCall(SipAccount account, CallDirection direction) : base(account)
+    /// <param name="logger"></param>
+    internal SipCall(SipAccount account, CallDirection direction, IPhoneLogger logger) : base(account)
     {
+        _logger = logger;
         Direction = direction;
         _audioMediaRecorder = new AudioMediaRecorder();
     }
@@ -44,9 +47,11 @@ class SipCall : Call
     /// <param name="account">账号</param>
     /// <param name="direction">通话方向</param>
     /// <param name="id">通话编号</param>
-    internal SipCall(SipAccount account, CallDirection direction, int id) : base(account,
+    /// <param name="logger"></param>
+    internal SipCall(SipAccount account, CallDirection direction, int id, IPhoneLogger logger) : base(account,
         id)
     {
+        _logger = logger;
         Direction = direction;
         CallId = getInfo().callIdString;
         _audioMediaRecorder = new AudioMediaRecorder();
@@ -192,7 +197,7 @@ class SipCall : Call
         if (state != pjsip_inv_state.PJSIP_INV_STATE_CONNECTING) return;
 
         //录音：同时录制通话对方的声音和本地麦克风的声音
-        Console.WriteLine($"连接录音文件 {state} {CallId}...");
+        _logger.Debug(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name, $"连接录音文件 {state} {CallId}...");
         //audioMedia 对方的声音，录制他
         audioMedia?.startTransmit(_audioMediaRecorder);
 
@@ -241,7 +246,8 @@ class SipCall : Call
             case pjsip_inv_state.PJSIP_INV_STATE_CALLING:
                 if (_recordingFilePath != null)
                 {
-                    Console.WriteLine($"正在写入录音文件 {_recordingFilePath} ...");
+                    _logger.Debug(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name,
+                        $"正在写入录音文件 {_recordingFilePath} ...");
                     _audioMediaRecorder.createRecorder(_recordingFilePath);
                 }
 
@@ -301,5 +307,4 @@ class SipCall : Call
     }
 
     #endregion
-
 }

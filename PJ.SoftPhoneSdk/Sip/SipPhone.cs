@@ -112,7 +112,7 @@ static class SipPhone
             account = SipAccounts.FirstOrDefault(a => a.IsSameTo(name, password, host, port));
             if (account != null) return account;
 
-            account = new SipAccount(name, password, host, port);
+            account = new SipAccount(name, password, host, port, _logger!.Logger);
             SipAccounts.Add(account);
         }
 

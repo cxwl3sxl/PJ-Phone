@@ -15,6 +15,7 @@ class SipAccount : Account
     private readonly string _password;
     private readonly string _host;
     private readonly int _port;
+    private readonly IPhoneLogger _logger;
     private SipCall? _lastCall;
     private string? _soundStoreDir;
 
@@ -53,12 +54,14 @@ class SipAccount : Account
     /// <param name="password">密码</param>
     /// <param name="host">服务器地址</param>
     /// <param name="port">服务器端口</param>
-    public SipAccount(string name, string password, string host, int port)
+    /// <param name="logger">日志</param>
+    public SipAccount(string name, string password, string host, int port, IPhoneLogger logger)
     {
         Name = _name = name;
         _password = password;
         _host = host;
         _port = port;
+        _logger = logger;
     }
 
     /// <summary>
@@ -126,13 +129,13 @@ class SipAccount : Account
         lock (_lock)
         {
             if (_lastCall != null) return null;
-            _lastCall = new SipCall(this, CallDirection.OutGoing);
+            _lastCall = new SipCall(this, CallDirection.OutGoing, _logger);
         }
 
         _lastCall.SetRecordingFile(BuildRecordingFilePath(_name, dstNumber));
 
-        Console.WriteLine(
-            $"=========> 正在发起呼叫[{Thread.CurrentThread.Name ?? $"{Thread.CurrentThread.ManagedThreadId}"}] :{_lastCall.CallId} -> {dstNumber}");
+        _logger.Debug(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name,
+            $"=========> 正在发起呼叫:{_lastCall.CallId} -> {dstNumber}");
 
         OnCalling?.Invoke(this, _lastCall);
         HookCall(_lastCall);
@@ -185,7 +188,7 @@ class SipAccount : Account
         lock (_lock)
         {
             //本地忙时，来电直接挂断
-            var call = new SipCall(this, CallDirection.InComing, prm.callId);
+            var call = new SipCall(this, CallDirection.InComing, prm.callId, _logger);
             var file = BuildRecordingFilePath("$SOURCE", _name);
             if (file != null)
             {

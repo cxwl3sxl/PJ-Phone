@@ -5,6 +5,8 @@ namespace PJ.SoftPhoneSdk.Sip;
 class PhoneLoggerWriter(IPhoneLogger logger) : LogWriter
 {
 
+    public IPhoneLogger Logger => logger;
+
     public override void write(LogEntry entry)
     {
         /*
