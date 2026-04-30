@@ -196,10 +196,14 @@ class SipCall : Call
 
         if (state != pjsip_inv_state.PJSIP_INV_STATE_CONNECTING) return;
 
-        //录音：同时录制通话对方的声音和本地麦克风的声音
-        _logger.Debug(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name, $"连接录音文件 {state} {CallId}...");
-        //audioMedia 对方的声音，录制他
-        audioMedia?.startTransmit(_audioMediaRecorder);
+        if (_recordingFilePath != null)
+        {
+            //录音：同时录制通话对方的声音和本地麦克风的声音
+            _logger.Debug(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name,
+                $"连接录音文件 {state} {CallId}...");
+            //audioMedia 对方的声音，录制他
+            audioMedia?.startTransmit(_audioMediaRecorder);
+        }
 
         if (!SipPhone.HasSoundDevice) return;
         //本地回放与采集
